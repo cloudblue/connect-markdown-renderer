@@ -1,0 +1,6 @@
+-r prod.txt
+coverage[toml]
+flake8
+pytest
+pytest-cov
+pytest-mock
