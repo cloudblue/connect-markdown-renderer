@@ -8,10 +8,10 @@ def read_file(name):
 
 
 setup(
-    name='connect-fluent-client',
+    name='connect-markdown-renderer',
     author='CloudBlue',
     url='https://connect.cloudblue.com',
-    description='CloudBlue Connect Fluent REST Client',
+    description='CloudBlue Connect Terminal Markdown Renderer',
     long_description=read_file('README.md'),
     long_description_content_type='text/markdown',
     python_requires='>=3.7',
@@ -21,11 +21,6 @@ setup(
     install_requires=read_file('requirements/prod.txt').splitlines(),
     setup_requires=['setuptools_scm', 'pytest-runner'],
     use_scm_version=True,
-    entry_points={
-        'console_scripts': [
-            'ccli = cnctcli.ccli:main',
-        ]
-    },
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Console',
@@ -35,6 +30,6 @@ setup(
         'Programming Language :: Python :: 3.8',
         'Topic :: Utilities',
     ],
-    keywords='fulfillment command line interface utility cli vendor connect cloudblue',
+    keywords='markdown ansi fulfillment command line interface utility cli vendor connect cloudblue',
 
 )

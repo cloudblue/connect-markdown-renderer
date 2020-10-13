@@ -2,48 +2,36 @@ DEFAULT_THEME = {
     'headings': {
         1: {
             'fg': 'darkslateblue',
-            'bg': '',
-            'style': '',
         },
         2: {
             'fg': 'slateblue',
-            'bg': '',
-            'style': '',
         },
         3: {
             'fg': 'mediumslateblue',
-            'bg': '',
-            'style': '',
         },
         4: {
             'fg': 'deepskyblue',
-            'bg': '',
-            'style': '',
         },
         5: {
             'fg': 'skyblue',
-            'bg': '',
-            'style': '',
         },
         6: {
             'fg': 'lightskyblue',
-            'bg': '',
-            'style': '',
         },
+    },
+    'p': {
+        'fg': 'white',
     },
     'strong': {
         'fg': 'indigo',
-        'bg': '',
         'style': 'bold',
     },
     'em': {
         'fg': 'mediumorchid',
-        'bg': '',
         'style': 'bold',
     },
-    'strikethrough': {
+    'del': {
         'fg': 'olive',
-        'bg': '',
         'style': 'bold',
     },
     'hr': {
@@ -51,16 +39,23 @@ DEFAULT_THEME = {
         'line': '─',
         'color': {
             'fg': 'hotpink',
-            'bg': '',
-            'style': '',
         }
+    },
+    'img': {
+        'start_symbol': '\U0001F5bc',
+        'end_symbol': '\U0001F5bc',
+        'text_color': {
+            'fg': 'orange',
+        },
+        'link_color': {
+            'fg': 'white',
+            'style': 'bold+underline',
+        },
     },
     'ol': {
         'separator': '. ',
         'color': {
             'fg': 'yellow',
-            'bg': '',
-            'style': '',
         }
     },
     'ul': {
@@ -78,7 +73,7 @@ DEFAULT_THEME = {
             'fg': 'gray',
         },
     },
-    'link': {
+    'a': {
         'start_symbol': '↣',
         'end_symbol': '↤',
         'text_color': {

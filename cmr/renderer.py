@@ -1,30 +1,21 @@
-import re
 import shutil
 
 from mistune import Renderer, escape, escape_link, markdown
 from colors import color
-from prettytable import PrettyTable
 from pygments import highlight
 from pygments.formatters.terminal import TerminalFormatter
 from pygments.lexers import get_lexer_by_name, guess_lexer
 
+from cmr.tables import TableRenderer
 from cmr.theme import DEFAULT_THEME
 
 
 class TerminalRenderer(Renderer):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self._theme = kwargs.get('theme', DEFAULT_THEME)
+    def __init__(self, theme=DEFAULT_THEME, **kwargs):
+        super().__init__(**kwargs)
+        self._theme = theme
         self._columns, self._lines = shutil.get_terminal_size()
-        self._table_rows = None
-        self._table_row = None
-
-    def strike(self, text):
-        result = ''
-        for c in text:
-            result = result + c + '\u0336'
-        return result
+        self._table = None
 
     def header(self, text, level, raw=None):
         """Rendering header/heading tags like ``<h1>`` ``<h2>``.
@@ -33,12 +24,12 @@ class TerminalRenderer(Renderer):
         :param level: a number for the header level, for example: 1.
         :param raw: raw text content of the header.
         """
-        theme = self._theme['headings'][level]
-        # indent = ' ' * (level - 1)
-        indent = ''
+        color_info = {}
+        if self._theme is not None:
+            color_info = self._theme.get('headings', {}).get(level, {})
         return color(
-            f'{indent}{text}\n\n',
-            **theme,
+            f'{text}\n\n',
+            **color_info,
         )
 
     def double_emphasis(self, text):
@@ -46,25 +37,31 @@ class TerminalRenderer(Renderer):
 
         :param text: text content for emphasis.
         """
-        theme = self._theme['strong']
-        return color(text, **theme)
+        color_info = {}
+        if self._theme is not None:
+            color_info = self._theme.get('strong', {})
+        return color(text, **color_info)
 
     def emphasis(self, text):
         """Rendering *emphasis* text.
 
         :param text: text content for emphasis.
         """
-        theme = self._theme['em']
-        return color(text, **theme)
+        color_info = {}
+        if self._theme is not None:
+            color_info = self._theme.get('em', {})
+        return color(text, **color_info)
 
     def strikethrough(self, text):
         """Rendering ~~strikethrough~~ text.
 
         :param text: text content for strikethrough.
         """
-        theme = self._theme['strikethrough']
-        text = self.strike(text)
-        return color(f'{text}', **theme)
+        color_info = {}
+        if self._theme is not None:
+            color_info = self._theme.get('del', {})
+        text = self._strike(text)
+        return color(f'{text}', **color_info)
 
     def list(self, body, ordered=True):
         """Rendering list tags like ``<ul>`` and ``<ol>``.
@@ -72,20 +69,38 @@ class TerminalRenderer(Renderer):
         :param body: body contents of the list.
         :param ordered: whether this list is ordered or not.
         """
+        color_info = {}
+        sep = '. ' if ordered else '  '
+        if self._theme is not None:
+            theme_info = self._theme.get('ol' if ordered else 'ul', {})
+            sep = theme_info.get('separator', sep)
+            color_info = theme_info.get('color', {})
         if ordered:
-            theme = self._theme['ol']
-            sep = theme['separator']
-            return '\n' + '\n'.join([
-                color(f'  {idx}{sep}{text}', **theme['color'])
-                for idx, text in enumerate(body.splitlines(), start=1)
-            ]) + '\n\n'
+            sep = '. '
+
+            return (
+                '\n'
+                + '\n'.join(
+                    [
+                        color(f'  {idx}{sep}{text}', **color_info)
+                        for idx, text in enumerate(body.splitlines(), start=1)
+                    ]
+                )
+                + '\n\n'
+            )
         theme = self._theme['ul']
         symbol = theme['symbol']
         sep = theme['separator']
-        return '\n' + '\n'.join([
-            color(f'  {symbol}{sep}{text}', **theme['color'])
-            for text in body.splitlines()
-        ]) + '\n\n'
+        return (
+            '\n'
+            + '\n'.join(
+                [
+                    color(f'  {symbol}{sep}{text}', **theme['color'])
+                    for text in body.splitlines()
+                ]
+            )
+            + '\n\n'
+        )
 
     def list_item(self, text):
         """Rendering list item snippet. Like ``<li>``."""
@@ -98,7 +113,7 @@ class TerminalRenderer(Renderer):
         :param lang: language of the given code.
         """
         lexer = get_lexer_by_name(lang) if lang else guess_lexer(code)
-        hl = highlight(code, lexer, TerminalFormatter(bg='dark', linenos=True))
+        hl = highlight(code, lexer, TerminalFormatter(bg='dark', linenos=False))
         return f'\n{hl}\n'
 
     def block_quote(self, text):
@@ -106,29 +121,44 @@ class TerminalRenderer(Renderer):
 
         :param text: text content of the blockquote.
         """
-        theme = self._theme['blockquote']
-        symbol = theme['symbol']
-        sep = theme['separator']
-        indent = theme['indent']
+        color_info = {}
+        symbol = '|'
+        sep = ' '
+        indent = '  '
+        if self._theme is not None:
+            theme_info = self._theme.get('blockquote', {})
+            color_info = theme_info.get('color', {})
+            symbol = theme_info.get('symbol', symbol)
+            sep = theme_info.get('separator', sep)
+            indent = theme_info.get('indent', indent)
+
         lines = text.splitlines()
         lines = [
-            color(f'{indent}{symbol}{sep}{line}', **theme['color'])
-            for line in lines
+            color(f'{indent}{symbol}{sep}{line}', **color_info) for line in lines
         ]
         return '\n'.join(lines) + '\n'
 
     def hrule(self):
-        theme = self._theme['hr']
-        delimiter = theme['delimiter']
-        line = theme['line'] * (self._columns - 2)
+        color_info = {}
+        delimiter = '*'
+        line = '-' * (self._columns - 2)
+        if self._theme is not None:
+            theme_info = self._theme.get('hr', {})
+            delimiter = theme_info.get('delimiter', delimiter)
+            line = theme_info.get('line', '-') * (self._columns - 2)
+            color_info = theme_info.get('color', {})
         return color(
             f'\n{delimiter}{line}{delimiter}\n\n',
-            **theme['color'],
+            **color_info,
         )
 
     def paragraph(self, text):
         """Rendering paragraph tags. Like ``<p>``."""
-        return '%s\n' % text.strip(' ')
+        color_info = {}
+        if self._theme is not None:
+            color_info = self._theme.get('p', {})
+        text = text.strip(' ')
+        return color(f'{text}', **color_info) + '\n'
 
     def codespan(self, text):
         """Rendering inline `code` text.
@@ -149,9 +179,14 @@ class TerminalRenderer(Renderer):
 
         :param text: text content.
         """
-        if self.options.get('parse_block_html'):
-            return text
         return escape(text)
+        # color_info = {}
+        # if self._theme is not None:
+        #     color_info = self._theme.get('p', {})
+
+        # if self.options.get('parse_block_html'):
+        #     return color(text, **color_info)
+        # return color(escape(text), **color_info)
 
     def block_html(self, html):
         """Rendering block level pure html content.
@@ -166,93 +201,15 @@ class TerminalRenderer(Renderer):
         :param header: header part of the table.
         :param body: body part of the table.
         """
-
-        theme = self._theme['table']
-        line_color = theme['line_color']
-        header_color = theme['header_color']
-        line_color = theme['line_color']
-
-        table = PrettyTable()
-        first_row = self._table_rows[0]
-        if first_row[0]['header']:
-            table.field_names = [
-                color(row['content'], **header_color) for row in first_row
-            ]
-            for col in first_row:
-                align = col['align'][0] if col['align'] else 'l'
-                content = color(col['content'], **header_color)
-                table.align[content] = align
-        for row_info in self._table_rows[1:]:
-            table.add_row(
-                [row['content'] for row in row_info]
-            )
-        result = table.get_string().splitlines()
-        start = color(theme['top_left_char'], **line_color)
-        end = color(theme['top_right_char'], **line_color)
-        first_row = result[0][1:-1]
-        first_row = first_row.replace(
-            table.horizontal_char,
-            color(theme['horizontal_char'], **line_color),
-        )
-        first_row = first_row.replace(
-            table.junction_char,
-            color(theme['top_junction_char'], **line_color),
-        )
-
-        lines = [
-            f'{start}{first_row}{end}',
-        ]
-        for row in result[1:-1]:
-            start = row[0]
-            end = row[-1]
-            inner = row[1:-1]
-
-            if start == table.junction_char:
-                start = color(theme['left_junction_char'], **line_color)
-            else:
-                start = color(theme['vertical_char'], **line_color)
-
-            if end == table.junction_char:
-                end = color(theme['right_junction_char'], **line_color)
-            else:
-                end = color(theme['vertical_char'], **line_color)
-
-            inner = inner.replace(
-                table.horizontal_char,
-                color(theme['horizontal_char'], **line_color),
-            )
-            inner = inner.replace(
-                table.vertical_char,
-                color(theme['vertical_char'], **line_color),
-            )
-            inner = inner.replace(
-                table.junction_char,
-                color(theme['intersection_char'], **line_color),
-            )
-
-            lines.append(f'{start}{inner}{end}')
-
-        start = color(theme['bottom_left_char'], **line_color)
-        end = color(theme['bottom_right_char'], **line_color)
-        last_row = result[-1][1:-1]
-        last_row = last_row.replace(
-            table.horizontal_char,
-            color(theme['horizontal_char'], **line_color),
-        )
-        last_row = last_row.replace(
-            table.junction_char,
-            color(theme['bottom_junction_char'], **line_color),
-        )
-        lines.append(f'{start}{last_row}{end}')
-        self._table_rows = None
-        self._table_row = None
-        return '\n'.join(lines)
+        rendered = ''
+        if self._table:
+            rendered = self._table.render()
+            self._table = None
+        return rendered
 
     def table_row(self, content):
-        if self._table_rows is None:
-            self._table_rows = []
-        self._table_rows.append(self._table_row)
-        self._table_row = None
+        if self._table:
+            self._table.new_row()
         return ''
 
     def table_cell(self, content, **flags):
@@ -265,16 +222,16 @@ class TerminalRenderer(Renderer):
         header = flags['header']
         align = flags['align']
 
-        if self._table_row is None:
-            self._table_row = []
+        theme = self._theme.get('table', {})
+        if not self._table:
+            self._table = TableRenderer(
+                **theme
+            )
 
-        self._table_row.append(
-            {
-                'header': header,
-                'align': align,
-                'content': content,
-            },
-        )
+        if header:
+            self._table.add_header_cell(content, align)
+        else:
+            self._table.add_cell(content)
         return ''
 
     def escape(self, text):
@@ -283,6 +240,23 @@ class TerminalRenderer(Renderer):
         :param text: text content.
         """
         return escape(text)
+
+    def _render_link(self, link, title, text, theme_tag):
+        link = escape_link(link)
+        link_color = {}
+        text_color = {}
+        start = '->'
+        end = '<-'
+
+        if self._theme is not None:
+            theme_info = self._theme.get(theme_tag, {})
+            start = theme_info.get('start_symbol', start)
+            end = theme_info.get('end_symbol', end)
+            text_color = theme_info.get('text_color', text_color)
+            link_color = theme_info.get('link_color', link_color)
+        text = color(text, **text_color)
+        link = color(f' {start} {link} {end}', **link_color)
+        return f'{text}{link}'
 
     def autolink(self, link, is_email=False):
         return self.link(link, '', link)
@@ -294,15 +268,7 @@ class TerminalRenderer(Renderer):
         :param title: title content for `title` attribute.
         :param text: text content for description.
         """
-        link = escape_link(link)
-        theme = self._theme['link']
-        start = theme['start_symbol']
-        end = theme['end_symbol']
-        text_color = theme['text_color']
-        link_color = theme['link_color']
-        text = color(text, **text_color)
-        link = color(f' {start} {link} {end}', **link_color)
-        return f'{text}{link}'
+        return self._render_link(link, title, text, 'a')
 
     def image(self, src, title, text):
         """Rendering a image with title and text.
@@ -311,7 +277,7 @@ class TerminalRenderer(Renderer):
         :param title: title text of the image.
         :param text: alt text of the image.
         """
-        return ''
+        return self._render_link(src, title, text, 'img')
 
     def inline_html(self, html):
         """Rendering span level pure html content.
@@ -322,7 +288,6 @@ class TerminalRenderer(Renderer):
 
     def newline(self):
         """Rendering newline element."""
-        print('newline')
         return '\n'
 
     def footnote_ref(self, key, index):
@@ -331,11 +296,7 @@ class TerminalRenderer(Renderer):
         :param key: identity key for the footnote.
         :param index: the index count of current footnote.
         """
-        html = (
-            '<sup class="footnote-ref" id="fnref-%s">'
-            '<a href="#fn-%s">%d</a></sup>'
-        ) % (escape(key), escape(key), index)
-        return html
+        return ''
 
     def footnote_item(self, key, text):
         """Rendering a footnote item.
@@ -343,45 +304,22 @@ class TerminalRenderer(Renderer):
         :param key: identity key for the footnote.
         :param text: text content of the footnote.
         """
-        back = (
-            '<a href="#fnref-%s" class="footnote">&#8617;</a>'
-        ) % escape(key)
-        text = text.rstrip()
-        if text.endswith('</p>'):
-            text = re.sub(r'<\/p>$', r'%s</p>' % back, text)
-        else:
-            text = '%s<p>%s</p>' % (text, back)
-        html = '<li id="fn-%s">%s</li>\n' % (escape(key), text)
-        return html
+        return ''
 
     def footnotes(self, text):
         """Wrapper for all footnotes.
 
         :param text: contents of all footnotes.
         """
-        html = '<div class="footnotes">\n%s<ol>%s</ol>\n</div>\n'
-        return html % (self.hrule(), text)
+        return ''
+
+    def _strike(self, text):
+        result = ''
+        for c in text:
+            result = result + c + '\u0336'
+        return result
 
 
 def render(md):
     renderer = TerminalRenderer()
-    data = markdown(md, renderer=renderer)
-    print(data)
-
-
-def test():
-    md = """
-> This is
-> a blockquote
-> OK
-
-| Tables   |      Are      |  Cool |
-|----------|:-------------:|------:|
-| col 1 is |  left-aligned | $1600 |
-| col 2 is |    centered   |   $12 |
-| col 3 is | right-aligned |    $1 |
-
-
-"""
-
-    render(md)
+    return markdown(md, renderer=renderer)
