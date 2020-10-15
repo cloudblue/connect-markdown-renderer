@@ -1,0 +1,7 @@
+-r test.txt
+Sphinx==3.1.2
+sphinx-rtd-theme==0.4.3
+sphinx-copybutton==0.2.11
+setuptools-scm==3.5.0
+m2r==0.2.1
+recommonmark==0.6.0
