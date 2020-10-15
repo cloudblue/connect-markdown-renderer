@@ -5,8 +5,8 @@ jobs:
   - os: linux
     python: 3.6
     sudo: true
-    env: 
-      - BUILD=PYPI
+    env:
+    - BUILD=PYPI
   - os: linux
     python: 3.7
     sudo: true
@@ -14,16 +14,15 @@ jobs:
     python: 3.8
     sudo: true
 install:
-  - pip install -r requirements/test.txt
-  - pip install pytest-cov
+- pip install -r requirements/test.txt
+- pip install pytest-cov
 script:
-  - flake8
-  - pytest
+- flake8
+- pytest
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
-
-
+- bash <(curl -s https://codecov.io/bash)
 deploy:
+  matrix:
   - provider: pypi
     skip_cleanup: true
     skip_existing: true
@@ -36,3 +35,5 @@ deploy:
       distributions: sdist
       condition: "$BUILD = PYPI"
       repo: cloudblue/connect-markdown-renderer
+  password:
+    secure: TDkIMx3J+GEUCD34kpUhJIhPfwaryEY6uzN2X+H92Y5XwEaFCPYACAoI8RxaHYfpSdF9p/RzxuEgOt50gZwDF/UwV6r3tDQQYB3bqEu6Xg3mFHrG8MZAGU79KFqHYcVcTU9/ckkcpEYX9G/+F/lSLnWIaIu683PlbQbeARKRWnGNzbdmebKnjEcHKi2owXsxwesu/tJBT9qUXiXyGWHlweYdGrfJz0mlTskyUYHK8xqHVSxxdzfYFEpWMlNG/Sc98ddsrWNq8aF1MqqaDv2s1uae/V9cdBnKBZaBfBuV3sDEbHSuglDGiwdQ0rcBTNR1FJELT9aRJratoKtltiWDkyodvthGj/dVBYtyMlm2+ESOuTKsUEylPx5gv5y24jGCEbnkmiKowAFQhJf5+hv/IfDu3NZL9OZ7UnFLnG4OMqdLQOFaMmR3wmWhD44Cy8XkGkOyMt2ci/rLV4iI5OPPgMOVWt92YLi8YOLPnTgsqW7dDXUC6pUXDhIEnga61GBNFNcceH5DRV+268GK5JMK92DZpIL8SsAzNwCth9e6F2AJACh4EL6ygboTM92pIIiqOpkNEVvHY16b0hNxg5D9XCVaJRVaigzZPYp6p8eaH7bW+qhJmkOB88cX6Juk2OnS2HKaeSer/nmYrw2xewuDsuxYH4HsUVnReLtGu+60v80=
