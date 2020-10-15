@@ -67,7 +67,7 @@ This code will produce the following output:
 
 
 
-## Limitation
+## Limitations
 
 `connect-markdown-renderer` does not support:
 
