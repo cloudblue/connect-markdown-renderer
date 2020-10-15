@@ -55,7 +55,7 @@ def test_paragraph():
     value = renderer.paragraph(text)
 
     colors = DEFAULT_THEME['p']
-    assert value == color('Text', **colors) + '\n'
+    assert value == color('Text', **colors) + '\n\n'
 
 
 def test_text():

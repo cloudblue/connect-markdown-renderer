@@ -71,10 +71,12 @@ class TerminalRenderer(Renderer):
         """
         color_info = {}
         sep = '. ' if ordered else '  '
+        symbol = '*'
         if self._theme is not None:
             theme_info = self._theme.get('ol' if ordered else 'ul', {})
             sep = theme_info.get('separator', sep)
             color_info = theme_info.get('color', {})
+            symbol = theme_info.get('symbol', symbol)
         if ordered:
             sep = '. '
 
@@ -88,14 +90,11 @@ class TerminalRenderer(Renderer):
                 )
                 + '\n\n'
             )
-        theme = self._theme['ul']
-        symbol = theme['symbol']
-        sep = theme['separator']
         return (
             '\n'
             + '\n'.join(
                 [
-                    color(f'  {symbol}{sep}{text}', **theme['color'])
+                    color(f'  {symbol}{sep}{text}', **color_info)
                     for text in body.splitlines()
                 ]
             )
@@ -158,20 +157,23 @@ class TerminalRenderer(Renderer):
         if self._theme is not None:
             color_info = self._theme.get('p', {})
         text = text.strip(' ')
-        return color(f'{text}', **color_info) + '\n'
+        return color(f'{text}', **color_info) + '\n\n'
 
     def codespan(self, text):
         """Rendering inline `code` text.
 
         :param text: text content for inline code.
         """
+
+        color_info = {}
+        if self._theme is not None:
+            color_info = self._theme.get('code', {})
+
         text = escape(text.rstrip(), smart_amp=False)
-        theme = self._theme['code']
-        return color(text, **theme)
+        return color(text, **color_info)
 
     def linebreak(self):
         """Rendering line break like ``<br>``."""
-        print('linebreak')
         return '\n'
 
     def text(self, text):
@@ -180,13 +182,6 @@ class TerminalRenderer(Renderer):
         :param text: text content.
         """
         return escape(text)
-        # color_info = {}
-        # if self._theme is not None:
-        #     color_info = self._theme.get('p', {})
-
-        # if self.options.get('parse_block_html'):
-        #     return color(text, **color_info)
-        # return color(escape(text), **color_info)
 
     def block_html(self, html):
         """Rendering block level pure html content.
