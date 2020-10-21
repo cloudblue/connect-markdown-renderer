@@ -99,7 +99,7 @@ def test_ordered_list():
     )
     separator = DEFAULT_THEME['ol']['separator']
     colors = DEFAULT_THEME['ol']['color']
-    expected = '\n' + '\n'.join(
+    expected = '\n'.join(
         [
             color(f'  1{separator}First', **colors),
             color(f'  2{separator}Second', **colors),
@@ -119,7 +119,7 @@ def test_unordered_list():
     symbol = DEFAULT_THEME['ul']['symbol']
     separator = DEFAULT_THEME['ul']['separator']
     colors = DEFAULT_THEME['ul']['color']
-    expected = '\n' + '\n'.join(
+    expected = '\n'.join(
         [
             color(f'  {symbol}{separator}First', **colors),
             color(f'  {symbol}{separator}Second', **colors),

@@ -81,8 +81,7 @@ class TerminalRenderer(Renderer):
             sep = '. '
 
             return (
-                '\n'
-                + '\n'.join(
+                '\n'.join(
                     [
                         color(f'  {idx}{sep}{text}', **color_info)
                         for idx, text in enumerate(body.splitlines(), start=1)
@@ -91,8 +90,7 @@ class TerminalRenderer(Renderer):
                 + '\n\n'
             )
         return (
-            '\n'
-            + '\n'.join(
+            '\n'.join(
                 [
                     color(f'  {symbol}{sep}{text}', **color_info)
                     for text in body.splitlines()
@@ -315,6 +313,6 @@ class TerminalRenderer(Renderer):
         return result
 
 
-def render(md):
-    renderer = TerminalRenderer()
+def render(md, theme=DEFAULT_THEME):
+    renderer = TerminalRenderer(theme=theme)
     return markdown(md, renderer=renderer)
