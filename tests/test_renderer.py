@@ -188,12 +188,11 @@ def test_blockquote():
     symbol = DEFAULT_THEME['blockquote']['symbol']
     sep = DEFAULT_THEME['blockquote']['separator']
     indent = DEFAULT_THEME['blockquote']['indent']
-    expected = '\n'.join([
+    expected = '\n\n' + '\n'.join([
         color(f'{indent}{symbol}{sep}{line}', **colors)
         for line in ('first', 'second', 'third')
-    ]) + '\n'
-
-    assert renderer.block_quote('first\nsecond\nthird\n') == expected
+    ]) + '\n\n'
+    assert renderer.block_quote('first\nsecond\nthird\n\n') == expected
 
 
 def test_blockcode():

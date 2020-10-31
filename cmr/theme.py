@@ -1,68 +1,67 @@
 DEFAULT_THEME = {
     'headings': {
         1: {
-            'fg': 'darkslateblue',
+            'fg': 'aquamarine',
         },
         2: {
-            'fg': 'slateblue',
+            'fg': 'turquoise',
         },
         3: {
-            'fg': 'mediumslateblue',
+            'fg': 'mediumturquoise',
         },
         4: {
-            'fg': 'deepskyblue',
+            'fg': 'darkturquoise',
         },
         5: {
-            'fg': 'skyblue',
+            'fg': 'lightseagreen',
         },
         6: {
-            'fg': 'lightskyblue',
+            'fg': 'teal',
         },
     },
     'p': {
         'fg': 'white',
     },
     'strong': {
-        'fg': 'indigo',
+        'fg': 'mediumpurple',
         'style': 'bold',
     },
     'em': {
-        'fg': 'mediumorchid',
+        'fg': 'plum',
         'style': 'bold',
     },
     'del': {
-        'fg': 'olive',
-        'style': 'bold',
+        'fg': 'darkorchid',
     },
     'hr': {
         'delimiter': '◈',
         'line': '─',
         'color': {
-            'fg': 'hotpink',
+            'fg': 'darkorange',
         }
     },
     'img': {
-        'start_symbol': '\U0001F5bc',
-        'end_symbol': '\U0001F5bc',
+        'start_symbol': '\U0001f3a8',
+        'end_symbol': '\U0001f3a8',
         'text_color': {
-            'fg': 'orange',
+            'fg': 'white',
         },
         'link_color': {
-            'fg': 'white',
-            'style': 'bold+underline',
+            'fg': 'hotpink',
+            'style': 'bold',
         },
     },
     'ol': {
         'separator': '. ',
         'color': {
-            'fg': 'yellow',
+            'fg': 'royalblue',
         }
     },
     'ul': {
         'symbol': '•',
         'separator': ' ',
         'color': {
-            'fg': 'magenta',
+            'fg': 'dodgerblue',
         },
     },
     'blockquote': {
@@ -70,18 +69,18 @@ DEFAULT_THEME = {
         'separator': ' ',
         'indent': '  ',
         'color': {
-            'fg': 'gray',
+            'fg': 'lemonchiffon',
         },
     },
     'a': {
-        'start_symbol': '↣',
-        'end_symbol': '↤',
+        'start_symbol': '\U0001F517',
+        'end_symbol': '\U0001F517',
         'text_color': {
-            'fg': 'gray',
+            'fg': 'white',
         },
         'link_color': {
-            'fg': 'white',
-            'style': 'bold+underline',
+            'fg': 'hotpink',
+            'style': 'bold',
         },
     },
     'code': {
@@ -102,13 +101,15 @@ DEFAULT_THEME = {
         'top_junction_char': '┬',
         'bottom_junction_char': '┴',
         'line_color': {
-            'fg': 'yellow',
+            'fg': 'cornflowerblue',
         },
         'header_color': {
-            'fg': 'brown',
+            'fg': 'lightskyblue',
+            'style': 'bold',
+
         },
         'cell_color': {
-            'fg': 'purple',
+            'fg': 'lightcyan',
         }
     }
 }

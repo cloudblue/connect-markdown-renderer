@@ -1,7 +1,7 @@
 import shutil
 
 from mistune import Renderer, escape, escape_link, markdown
-from colors import color
+from colors import color, strip_color
 from pygments import highlight
 from pygments.formatters.terminal import TerminalFormatter
 from pygments.lexers import get_lexer_by_name, guess_lexer
@@ -131,9 +131,9 @@ class TerminalRenderer(Renderer):
 
         lines = text.splitlines()
         lines = [
-            color(f'{indent}{symbol}{sep}{line}', **color_info) for line in lines
+            color(f'{indent}{symbol}{sep}{strip_color(line)}', **color_info) for line in lines
         ]
-        return '\n'.join(lines) + '\n'
+        return '\n\n' + '\n'.join(lines[:-1]) + '\n\n'
 
     def hrule(self):
         color_info = {}
@@ -151,6 +151,7 @@ class TerminalRenderer(Renderer):
 
     def paragraph(self, text):
         """Rendering paragraph tags. Like ``<p>``."""
+        print(text)
         color_info = {}
         if self._theme is not None:
             color_info = self._theme.get('p', {})
