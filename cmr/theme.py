@@ -37,7 +37,7 @@ DEFAULT_THEME = {
         'delimiter': '◈',
         'line': '─',
         'color': {
-            'fg': 'darkorange',
+            'fg': 'aqua',
         }
     },
     'img': {
@@ -69,7 +69,7 @@ DEFAULT_THEME = {
         'separator': ' ',
         'indent': '  ',
         'color': {
-            'fg': 'lemonchiffon',
+            'fg': 'lavender',
         },
     },
     'a': {
