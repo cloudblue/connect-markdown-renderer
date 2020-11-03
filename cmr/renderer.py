@@ -151,7 +151,6 @@ class TerminalRenderer(Renderer):
 
     def paragraph(self, text):
         """Rendering paragraph tags. Like ``<p>``."""
-        print(text)
         color_info = {}
         if self._theme is not None:
             color_info = self._theme.get('p', {})
