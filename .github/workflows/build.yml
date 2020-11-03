@@ -32,14 +32,17 @@ jobs:
     - name: Testing
       run: |
         poetry run pytest
-    - name: SonarCloud
-      uses: SonarSource/sonarcloud-github-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     - name: Upload coverage
       uses: codecov/codecov-action@v1
       with:
         file: ./coverage.xml
         fail_ci_if_error: true
         verbose: true
+    - name: Fix coverage.xml for Sonar
+      run: |
+        sed -i 's/\/home\/runner\/work\/connect-markdown-renderer\/connect-markdown-renderer\//\/github\/workspace\//g' coverage.xml
+    - name: SonarCloud
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
