@@ -1,7 +1,7 @@
 import shutil
 
 from mistune import Renderer, escape, escape_link, markdown
-from colors import color
+from colors import color, strip_color
 from pygments import highlight
 from pygments.formatters.terminal import TerminalFormatter
 from pygments.lexers import get_lexer_by_name, guess_lexer
@@ -81,8 +81,7 @@ class TerminalRenderer(Renderer):
             sep = '. '
 
             return (
-                '\n'
-                + '\n'.join(
+                '\n'.join(
                     [
                         color(f'  {idx}{sep}{text}', **color_info)
                         for idx, text in enumerate(body.splitlines(), start=1)
@@ -91,8 +90,7 @@ class TerminalRenderer(Renderer):
                 + '\n\n'
             )
         return (
-            '\n'
-            + '\n'.join(
+            '\n'.join(
                 [
                     color(f'  {symbol}{sep}{text}', **color_info)
                     for text in body.splitlines()
@@ -133,9 +131,9 @@ class TerminalRenderer(Renderer):
 
         lines = text.splitlines()
         lines = [
-            color(f'{indent}{symbol}{sep}{line}', **color_info) for line in lines
+            color(f'{indent}{symbol}{sep}{strip_color(line)}', **color_info) for line in lines
         ]
-        return '\n'.join(lines) + '\n'
+        return '\n\n' + '\n'.join(lines[:-1]) + '\n\n'
 
     def hrule(self):
         color_info = {}
@@ -315,6 +313,6 @@ class TerminalRenderer(Renderer):
         return result
 
 
-def render(md):
-    renderer = TerminalRenderer()
+def render(md, theme=DEFAULT_THEME):
+    renderer = TerminalRenderer(theme=theme)
     return markdown(md, renderer=renderer)
