@@ -33,9 +33,6 @@ build-backend = "poetry.core.masonry.api"
 addopts = "-p no:cacheprovider --junitxml=out.xml --cov=cmr --cov-report=xml"
 junit_family = "xunit2"
 
-[tool.coverage.run]
-branch = true
-
 [tool.coverage.report]
 omit = [
     "cmr/__init__.py",
