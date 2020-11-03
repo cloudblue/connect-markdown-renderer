@@ -21,6 +21,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
+        git fetch --unshallow
         python -m pip install --upgrade pip
         pip install poetry
         poetry install
