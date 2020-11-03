@@ -214,8 +214,9 @@ class TerminalRenderer(Renderer):
         """
         header = flags['header']
         align = flags['align']
-
-        theme = self._theme.get('table', {})
+        theme = {}
+        if self._theme:
+            theme = self._theme.get('table', {})
         if not self._table:
             self._table = TableRenderer(
                 **theme

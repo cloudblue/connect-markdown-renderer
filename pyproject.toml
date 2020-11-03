@@ -30,14 +30,8 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
-testpaths = "tests"
-addopts = "--cov=cmr --cov-report=term-missing:skip-covered --cov-report=html --cov-report=xml --junitxml=out.xml"
-python_files = "test_*.py"
+addopts = "-p no:cacheprovider --junitxml=out.xml --cov=cmr --cov-report=xml"
 junit_family = "xunit2"
-log_cli = true
-
-[tool.coverage.run]
-branch = true
 
 [tool.coverage.report]
 omit = [

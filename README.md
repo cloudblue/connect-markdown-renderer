@@ -1,7 +1,7 @@
 # CloudBlue Connect Markdown Renderer
 
 
-![pyversions](https://img.shields.io/pypi/pyversions/connect-markdown-renderer.svg) [![PyPi Status](https://img.shields.io/pypi/v/connect-markdown-renderer.svg)](https://pypi.org/project/connect-markdown-renderer/) [![Build Status](https://github.com/cloudblue/connect-markdown-renderer/workflows/Build%20Connect%20Markdown%20Renderer/badge.svg)](https://github.com/cloudblue/connect-markdown-renderer/actions) [![codecov](https://codecov.io/gh/cloudblue/connect-markdown-renderer/branch/master/graph/badge.svg)](https://codecov.io/gh/cloudblue/connect-markdown-renderer)
+![pyversions](https://img.shields.io/pypi/pyversions/connect-markdown-renderer.svg) [![PyPi Status](https://img.shields.io/pypi/v/connect-markdown-renderer.svg)](https://pypi.org/project/connect-markdown-renderer/) [![Build Status](https://github.com/cloudblue/connect-markdown-renderer/workflows/Build%20Connect%20Markdown%20Renderer/badge.svg)](https://github.com/cloudblue/connect-markdown-renderer/actions) [![codecov](https://codecov.io/gh/cloudblue/connect-markdown-renderer/branch/master/graph/badge.svg)](https://codecov.io/gh/cloudblue/connect-markdown-renderer) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=markdown-renderer&metric=alert_status)](https://sonarcloud.io/dashboard?id=markdown-renderer)
 
 
 ## Introduction

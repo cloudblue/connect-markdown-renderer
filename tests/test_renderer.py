@@ -6,7 +6,7 @@ from pygments import highlight
 from pygments.formatters.terminal import TerminalFormatter
 from pygments.lexers import get_lexer_by_name
 
-from cmr.renderer import TerminalRenderer
+from cmr.renderer import TerminalRenderer, render
 from cmr.tables import TableRenderer
 from cmr.theme import DEFAULT_THEME
 
@@ -248,3 +248,86 @@ def test_escape(mocker):
     renderer = TerminalRenderer()
     renderer.escape('<test>')
     assert mock.called_once_with('<test>')
+
+
+def test_render():
+    md = """
+# Heading 1
+
+## Heading 2
+
+### Heading 3
+
+#### Heading 4
+
+##### Heading 5
+
+###### Heading 6
+
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque pulvinar
+sagittis lectus, rhoncus faucibus ante molestie ac. *Fusce et erat at dolor
+pretium bibendum vitae a libero.* Nullam efficitur tincidunt enim. Donec
+pretium nisi in orci laoreet fermentum at fermentum erat. Aliquam sodales
+eget enim vitae ullamcorper. Vivamus iaculis nulla sed mi malesuada
+consectetur.
+Nam malesuada porta tellus, eu faucibus ante congue sed. Vestibulum et
+justo id nisi pretium pretium. Nam finibus nec sapien a ultrices. In a
+porttitor neque, vel sodales nibh. Aliquam eu felis vel nisi ullamcorper
+vulputate. Phasellus ut feugiat dui. Fusce a dictum lacus. Donec sed dui
+feugiat, dignissim eros sed, scelerisque nunc.
+
+Maecenas at velit pretium libero ullamcorper finibus. **Vivamus vel velit
+quis erat rhoncus convallis.** Mauris viverra suscipit eros, eget molestie
+tortor fermentum sodales.
+Proin porta ullamcorper ornare. Morbi sed lectus tempor, sollicitudin
+elit non, scelerisque odio.
+Mauris at molestie sem. Vivamus sed mi lacus. Morbi sed mauris nec massa
+pulvinar auctor a vel augue. Maecenas quis elementum enim. Nullam enim lacus,
+dictum et gravida et, luctus pretium lorem. Praesent finibus ex sit amet ante
+elementum cursus. Sed in est ac libero sagittis tempor. Morbi pulvinar
+facilisis tellus vel hendrerit. Maecenas fermentum ex non lectus ultricies
+congue. Curabitur laoreet eu eros at pretium. Vivamus hendrerit dignissim
+tortor, at rhoncus eros porttitor nec.
+
+-----
+
+
+
+| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+| zebra stripes | are neat      |    $1 |
+
+
+> This is a block
+> Second block line
+> Third block line
+
+
+* Bullet list 1
+* Bullet list 2
+* Bullet list 3
+
+
+1. Ordered list 1
+2. Ordered list 2
+3. Ordered list 3
+
+
+This is **strong**
+
+This is *italic*
+
+This is ~~striketrough~~
+
+[This is a link](https://google.com)
+
+
+![alt text](https://example.com/image.jpg "Logo Title Text 1")
+"""
+    rendered = render(md, theme=None)
+
+    assert rendered is not None
+    assert rendered != ''
