@@ -1,0 +1,91 @@
+[tool.poetry]
+name = "connect-markdown-renderer"
+version = "1.0.2"
+description = "Connect Markdown Renderer"
+authors = ["CloudBlue"]
+license = "Apache-2.0"
+packages = [
+    { include = "cmr" }
+]
+
+[tool.poetry.dependencies]
+mistune = "^0.8.4"
+Pygments = {version = "^2.7.2", python = ">=3.5"}
+ansicolors = "^1.1.8"
+
+
+[tool.poetry.dev-dependencies]
+coverage = {extras = ["toml"], version = "^5.3", python = ">=3.5.0,<4"}
+flakehell = {version = "^0.7.0", python = ">=3.5"}
+pytest = {version = "^6.1.2", python = ">=3.5"}
+pytest-cov = {version = "^2.10.1", python = ">=3.5"}
+pytest-mock = {version = "^3.3.1", python = ">=3.5"}
+Sphinx = {version = "^3.3.0", python = ">=3.5"}
+sphinx-rtd-theme = {version = "^0.5.0", python = ">=3.5"}
+sphinx-copybutton = {version = "^0.3.1", python = ">=3.5"}
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+testpaths = "tests"
+addopts = "--cov=cmr --cov-report=term-missing:skip-covered --cov-report=html --cov-report=xml"
+python_files = "test_*.py"
+junit_family = "xunit2"
+log_cli = true
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+omit = [
+    "cmr/__init__.py",
+]
+
+exclude_lines = [
+    "pragma: no cover",
+    "def __str__",
+    "def __repr__",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
+
+
+[tool.flakehell]
+
+exclude = [
+    ".idea",
+    ".vscode",
+    ".git",
+    "postgres_data",
+    "*/migrations/*.py",
+    "*/settings/*.py",
+    "*/manage.py",
+    "*.eggs",
+    "*.egg",
+    "tests/",
+    "./docs/*.rst",
+    "demo.ipynb"
+]
+show_source = true
+max_line_length = 120
+application_import_names = "smarkets"
+
+[tool.flakehell.plugins]
+pycodestyle = ["+*", "-W503"]
+pyflakes = ["+*"]
+pylint = ["-*"]
+
+[tool.isort]
+line_length = 100
+combine_as_imports = true
+balanced_wrapping = true
+lines_after_imports = 2
+include_trailing_comma = true
+not_skip = "__init__.py"
+multi_line_output = 5
+
+import_heading_stdlib = "built-in"
+import_heading_thirdparty = "external"
+import_heading_firstparty = "project"
+import_heading_localfolder = "app"
