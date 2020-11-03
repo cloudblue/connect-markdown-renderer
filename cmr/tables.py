@@ -66,7 +66,7 @@ class TableRenderer:
             vertical_sym + vertical_sym.join(values) + vertical_sym,
             color(self._left_junction_char, **self._line_color)
             + color(self._intersection_char, **self._line_color).join(horizontal_lines)
-            + color(self._right_junction_char, **self._line_color),            
+            + color(self._right_junction_char, **self._line_color),
         ]
 
     def render(self):
