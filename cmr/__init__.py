@@ -1,1 +1,1 @@
-from cmr.renderer import render  # noqa
+from connect.utils.terminal.markdown import render  # noqa

@@ -8,15 +8,6 @@
 
 `connect-markdown-renderer` is a small library that allow to render markdown documents in a terminal shell.
 
-## Requirements
-
-`connect-markdown-renderer` requires Python 3.6+ and depends on the following libraries:
-
-* ansicolors>=1.1.8,<2
-* mistune==0.8.4
-* pygments>=2.7.1<3
-
-
 
 ## Install
 
@@ -32,13 +23,13 @@ $ pip install connect-markdown-renderer
 
 ```python
 
-from cmr import render
+from connect.utils.terminal.markdown import render
 
 my_md = """
 
 # Heading level 1 - Paragraph
 
-This is a paragraph.
+This is a paragraph with inline formatting like *italic*, **strong**, ~~strikethrough~~, `inline code` and :clapping_hands: emojis!.
 
 ## Heading level 2 - Lists
 
@@ -48,12 +39,33 @@ This is a paragraph.
 2. Second item
 3. Third item
 
-
 **Unordered list:**
 
 * First
 * Second
 * Third
+
+### Heading level 3 - blockquote
+
+> This is a blockquote.
+> > ...and a nested blockquote.
+
+
+#### Heading level 4 - tables
+
+| Col 1 | Col 2 | Col 3 |
+|:------|:-----:|------:|
+| a | b | c |
+
+
+##### Heading level 5 - codeblock
+
+
+```python
+
+def this_is_my_python_function(args):
+    return 'Hello World!'
+
 
 """
 
@@ -67,14 +79,19 @@ This code will produce the following output:
 
 
 
-## Limitations
+## Features
 
-`connect-markdown-renderer` does not support:
+`connect-markdown-renderer` uses the new [markdown-it-py](https://github.com/executablebooks/markdown-it-py) parser and supports
+[CommonMark](https://commonmark.org) plus the following extensions:
 
-* Inline HTML
-* Footnotes
+* tables
+* strikethrough
+* emoji
+
+`connect-markdown-renderer` uses [rich](https://github.com/Textualize/rich) to render the markdown in the terminal.
 
 
 ## License
 
 `connect-markdown-renderer` is released under the [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+

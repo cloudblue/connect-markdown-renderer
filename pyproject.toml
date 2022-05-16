@@ -1,41 +1,52 @@
 [tool.poetry]
 name = "connect-markdown-renderer"
-version = "1.0.2"
+version = "0.0.0"
 description = "Connect Markdown Renderer"
 authors = ["CloudBlue"]
 license = "Apache-2.0"
 packages = [
+    { include = "connect" },
     { include = "cmr" }
 ]
+readme = "./README.md"
+documentation = "https://github.com/cloudblue/connect-markdown-renderer"
+homepage = "https://connect.cloudblue.com"
+repository = "https://github.com/cloudblue/connect-markdown-renderer"
 
 [tool.poetry.dependencies]
-mistune = "^0.8.4"
-Pygments = {version = "^2.7.2", python = ">=3.5"}
-ansicolors = "^1.1.8"
-
+python = ">=3.7,<4"
+rich = "^12.4.1"
+markdown-it-py = "^2.1.0"
 
 [tool.poetry.dev-dependencies]
-coverage = {extras = ["toml"], version = "^5.3", python = ">=3.5.0,<4"}
-flakehell = {version = "^0.7.0", python = ">=3.5"}
-pytest = {version = "^6.1.2", python = ">=3.5"}
-pytest-cov = {version = "^2.10.1", python = ">=3.5"}
-pytest-mock = {version = "^3.3.1", python = ">=3.5"}
-Sphinx = {version = "^3.3.0", python = ">=3.5"}
-sphinx-rtd-theme = {version = "^0.5.0", python = ">=3.5"}
-sphinx-copybutton = {version = "^0.3.1", python = ">=3.5"}
-twine = {version = "^3.2.0", python = ">=3.6"}
-wheel = {version = "^0.35.1", python = ">=3.6"}
+pytest = "^6.1.2"
+pytest-cov = "^2.10.1"
+pytest-mock = "^3.3.1"
+coverage = {extras = ["toml"], version = "^5.3"}
+flake8 = "~3.8"
+flake8-bugbear = "~20"
+flake8-cognitive-complexity = "^0.1"
+flake8-commas = "~2.0"
+flake8-future-import = "~0.4"
+flake8-import-order = "~0.18"
+flake8-broken-line = "~0.3"
+Sphinx = "^4.5.0"
+sphinx-copybutton = "^0.5.0"
+m2r2 = "^0.3.2"
+
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=1.0.0", "setuptools>=42"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
-addopts = "-p no:cacheprovider --junitxml=out.xml --cov=cmr --cov-report=xml"
-junit_family = "xunit2"
+testpaths = "tests"
+addopts = "--cov=connect.utils.terminal --cov-report=term-missing:skip-covered --cov-report=html --cov-report=xml"
+
+[tool.coverage.run]
+branch = true
 
 [tool.coverage.report]
 omit = [
-    "cmr/__init__.py",
 ]
 
 exclude_lines = [
@@ -45,43 +56,3 @@ exclude_lines = [
     "raise NotImplementedError",
     "if __name__ == .__main__.:",
 ]
-
-
-[tool.flakehell]
-
-exclude = [
-    ".idea",
-    ".vscode",
-    ".git",
-    "postgres_data",
-    "*/migrations/*.py",
-    "*/settings/*.py",
-    "*/manage.py",
-    "*.eggs",
-    "*.egg",
-    "tests/",
-    "./docs/*.rst",
-    "demo.ipynb"
-]
-show_source = true
-max_line_length = 120
-application_import_names = "smarkets"
-
-[tool.flakehell.plugins]
-pycodestyle = ["+*", "-W503"]
-pyflakes = ["+*"]
-pylint = ["-*"]
-
-[tool.isort]
-line_length = 100
-combine_as_imports = true
-balanced_wrapping = true
-lines_after_imports = 2
-include_trailing_comma = true
-not_skip = "__init__.py"
-multi_line_output = 5
-
-import_heading_stdlib = "built-in"
-import_heading_thirdparty = "external"
-import_heading_firstparty = "project"
-import_heading_localfolder = "app"
