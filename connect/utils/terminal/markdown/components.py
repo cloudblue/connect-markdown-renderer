@@ -39,11 +39,13 @@ class TableElement(MarkdownElement):
             border_style=border_style,
             header_style=header_style,
         )
-        for col in self.thead.rows[0].cells:
-            t.add_column(col.text, style=body_style)
-        for row in self.tbody.rows:
-            t.add_row(*[item.text for item in row.cells])
-        yield t
+        if self.thead:  # pragma: no cover
+            for col in self.thead.rows[0].cells:
+                t.add_column(col.text, style=body_style)
+        if self.tbody:  # pragma: no cover
+            for row in self.tbody.rows:
+                t.add_row(*[item.text for item in row.cells])
+            yield t
 
 
 class TableSectionElement(MarkdownElement):
