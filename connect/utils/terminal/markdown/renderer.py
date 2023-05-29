@@ -1,3 +1,4 @@
+from markdown_it import MarkdownIt
 from rich.emoji import Emoji, NoEmoji
 from rich.markdown import (
     BlockQuote,
@@ -11,7 +12,6 @@ from rich.markdown import (
 )
 from rich.segment import Segment
 from rich.style import Style
-from markdown_it import MarkdownIt
 
 from connect.utils.terminal.markdown.components import (
     Heading,

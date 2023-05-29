@@ -14,7 +14,11 @@ def test_inlines():
         width=132,
         color_system='standard',
     )
-    console.print(GFMarkdown('Text with *italic* and **bold** ~~strikethrough~~ `code` :clapping_hands:'))
+    console.print(
+        GFMarkdown(
+            'Text with *italic* and **bold** ~~strikethrough~~ `code` :clapping_hands:',
+        ),
+    )
     assert console.file.getvalue() == open('tests/data/inlines').read()
 
 
